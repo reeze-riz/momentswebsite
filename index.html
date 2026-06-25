@@ -23,18 +23,47 @@
 
     body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
 
+    /* ── Setup screen ── */
+    #setup-screen {
+      position: fixed; inset: 0; background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 300; padding: 24px; overflow-y: auto;
+    }
+    #setup-screen.hidden { display: none; }
+    .setup-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 36px; max-width: 500px; width: 100%;
+    }
+    .setup-box h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 8px; }
+    .setup-box .sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; line-height: 1.6; }
+    .setup-step { margin-bottom: 20px; }
+    .setup-step .step-label { font-size: 0.75rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+    .setup-step input {
+      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 6px; color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; padding: 10px 14px; outline: none; transition: border-color 0.15s;
+    }
+    .setup-step input:focus { border-color: var(--accent); }
+    .setup-step .hint { font-size: 0.75rem; color: var(--muted); margin-top: 5px; line-height: 1.5; }
+    .setup-step .hint a { color: var(--accent); }
+    .setup-divider { text-align: center; color: var(--muted); font-size: 0.8rem; margin: 18px 0; }
+    .btn-setup-save {
+      width: 100%; background: var(--accent); color: #0e0e10; border: none;
+      border-radius: 8px; padding: 12px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 500; cursor: pointer;
+    }
+    .btn-setup-save:hover { opacity: 0.85; }
+
     /* ── Name gate ── */
     #name-gate {
       position: fixed; inset: 0; background: var(--bg);
       display: flex; align-items: center; justify-content: center;
-      z-index: 200; padding: 24px;
-      transition: opacity 0.3s;
+      z-index: 200; padding: 24px; transition: opacity 0.3s;
     }
     #name-gate.hidden { opacity: 0; pointer-events: none; }
     .gate-box {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 16px; padding: 40px 36px; max-width: 400px; width: 100%;
-      text-align: center;
+      border-radius: 16px; padding: 40px 36px; max-width: 400px; width: 100%; text-align: center;
     }
     .gate-box .gate-icon { font-size: 2.4rem; margin-bottom: 16px; }
     .gate-box h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 400; margin-bottom: 8px; }
@@ -56,8 +85,7 @@
     /* ── Header ── */
     header {
       text-align: center; padding: 64px 24px 40px;
-      border-bottom: 1px solid var(--border);
-      position: relative;
+      border-bottom: 1px solid var(--border); position: relative;
     }
     .eyebrow { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
     header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 6vw, 3.6rem); font-weight: 400; }
@@ -68,39 +96,42 @@
       position: absolute; top: 20px; right: 20px;
       display: flex; align-items: center; gap: 8px;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 20px; padding: 6px 14px 6px 10px;
-      font-size: 0.8rem; color: var(--muted);
+      border-radius: 20px; padding: 6px 14px 6px 10px; font-size: 0.8rem; color: var(--muted);
     }
     .user-badge .avatar {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: var(--accent); color: #0e0e10;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.7rem; font-weight: 700;
+      width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #0e0e10;
+      display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700;
     }
     .user-badge span { color: var(--text); }
-    .user-badge button {
-      background: none; border: none; color: var(--muted);
-      font-size: 0.75rem; cursor: pointer; padding: 0; margin-left: 4px;
-    }
+    .user-badge button { background: none; border: none; color: var(--muted); font-size: 0.75rem; cursor: pointer; padding: 0; margin-left: 4px; }
     .user-badge button:hover { color: var(--text); }
 
-    /* ── Live indicator ── */
+    /* ── Notification bell ── */
+    .notif-bell {
+      position: absolute; top: 20px; left: 20px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 6px 14px; font-size: 0.8rem;
+      cursor: pointer; display: flex; align-items: center; gap: 6px;
+      color: var(--muted); transition: all 0.15s;
+    }
+    .notif-bell:hover { border-color: var(--accent); color: var(--accent); }
+    .notif-bell .badge {
+      background: var(--red); color: #fff; border-radius: 10px;
+      padding: 1px 6px; font-size: 10px; font-weight: 700; display: none;
+    }
+    .notif-bell .badge.show { display: inline; }
+
+    /* ── Live bar ── */
     .live-bar {
-      max-width: 1100px; margin: 0 auto;
-      padding: 16px 24px 0;
-      display: flex; align-items: center; gap: 8px;
-      font-size: 0.8rem; color: var(--muted);
+      max-width: 1100px; margin: 0 auto; padding: 16px 24px 0;
+      display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--muted);
     }
-    .live-dot {
-      width: 7px; height: 7px; border-radius: 50%; background: var(--green);
-      animation: pulse 2s infinite;
-    }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     /* ── Toolbar ── */
     .toolbar {
-      max-width: 1100px; margin: 0 auto;
-      padding: 20px 24px 0;
+      max-width: 1100px; margin: 0 auto; padding: 20px 24px 0;
       display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
     }
     .btn-add {
@@ -111,78 +142,78 @@
       cursor: pointer; transition: opacity 0.15s;
     }
     .btn-add:hover { opacity: 0.85; }
-
+    .btn-settings {
+      background: none; border: 1px solid var(--border); color: var(--muted);
+      border-radius: 6px; padding: 10px 14px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.15s;
+    }
+    .btn-settings:hover { border-color: var(--accent); color: var(--accent); }
+    #bin-id-display { font-size: 0.75rem; color: var(--muted); display: none; }
+    #bin-id-val { color: var(--accent); cursor: pointer; }
     .view-toggle {
       margin-left: auto; display: flex; gap: 4px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 6px; padding: 4px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 4px;
     }
-    .view-btn {
-      background: none; border: none; color: var(--muted);
-      padding: 6px 10px; border-radius: 4px; cursor: pointer;
-      font-size: 0.8rem; transition: all 0.15s;
-    }
+    .view-btn { background: none; border: none; color: var(--muted); padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; transition: all 0.15s; }
     .view-btn.active { background: var(--border); color: var(--text); }
 
     /* ── Grid ── */
     .grid {
-      max-width: 1100px; margin: 28px auto 80px;
-      padding: 0 24px;
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
+      max-width: 1100px; margin: 28px auto 80px; padding: 0 24px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;
     }
     .grid.list-view { grid-template-columns: 1fr; max-width: 700px; }
 
     /* ── Card ── */
     .card {
-      background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 12px; overflow: hidden;
-      transition: border-color 0.2s, transform 0.2s;
-      position: relative;
-      animation: fadeIn 0.3s ease;
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; transition: border-color 0.2s, transform 0.2s;
+      position: relative; animation: fadeIn 0.3s ease;
     }
     @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
     .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .card.new-highlight { border-color: var(--accent); }
 
     .card-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; cursor: pointer; }
     .card-img-placeholder {
-      width: 100%; aspect-ratio: 4/3; display: flex;
-      align-items: center; justify-content: center;
+      width: 100%; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center;
       background: var(--surface); color: var(--muted); font-size: 2rem; cursor: pointer;
     }
     .list-view .card-img, .list-view .card-img-placeholder { aspect-ratio: 16/7; }
 
     .card-body { padding: 14px 16px 16px; }
-
-    .card-meta {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 6px;
-    }
+    .card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
     .card-date { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
-
-    .card-author {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 11px; color: var(--muted);
-    }
+    .card-author { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
     .card-author .av {
-      width: 18px; height: 18px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 9px; font-weight: 700; color: #0e0e10; flex-shrink: 0;
+      width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: 9px; font-weight: 700; color: #0e0e10; flex-shrink: 0;
     }
-
     .card-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 400; line-height: 1.3; margin-bottom: 6px; }
     .card-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.55; }
 
-    .card-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    /* ── Reactions row on card ── */
+    .card-reactions {
+      display: flex; align-items: center; gap: 6px; margin-top: 10px; flex-wrap: wrap;
+    }
+    .reaction-btn {
+      display: flex; align-items: center; gap: 4px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+      padding: 3px 10px; font-size: 0.78rem; cursor: pointer; transition: all 0.15s;
+      color: var(--muted);
+    }
+    .reaction-btn:hover { border-color: var(--accent); }
+    .reaction-btn.reacted { border-color: var(--accent); color: var(--accent); background: rgba(200,169,110,0.08); }
+    .reaction-count { font-size: 0.75rem; }
+
+    .card-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
     .btn-sm {
       background: none; border: 1px solid var(--border); color: var(--muted);
-      padding: 4px 11px; border-radius: 4px;
-      font-family: 'DM Sans', sans-serif; font-size: 0.76rem; cursor: pointer;
-      transition: all 0.15s;
+      padding: 4px 11px; border-radius: 4px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.76rem; cursor: pointer; transition: all 0.15s;
     }
     .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
     .btn-sm.danger:hover { border-color: var(--red); color: var(--red); }
-    .btn-sm:disabled { opacity: 0.35; pointer-events: none; }
 
     .card-tag {
       position: absolute; top: 10px; right: 10px;
@@ -200,70 +231,92 @@
     /* ── Toast ── */
     .toast {
       position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; padding: 10px 20px;
-      font-size: 0.85rem; color: var(--text);
-      opacity: 0; transition: all 0.25s; z-index: 300; white-space: nowrap;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 20px; font-size: 0.85rem; color: var(--text);
+      opacity: 0; transition: all 0.25s; z-index: 500; white-space: nowrap;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+    /* ── Notification panel ── */
+    .notif-panel {
+      position: fixed; top: 0; right: 0; bottom: 0; width: 320px;
+      background: var(--surface); border-left: 1px solid var(--border);
+      z-index: 150; transform: translateX(100%); transition: transform 0.25s;
+      display: flex; flex-direction: column;
+    }
+    .notif-panel.open { transform: translateX(0); }
+    .notif-header {
+      padding: 20px 20px 16px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .notif-header h3 { font-family: 'Playfair Display', serif; font-weight: 400; font-size: 1.1rem; }
+    .notif-close { background: none; border: none; color: var(--muted); font-size: 1.2rem; cursor: pointer; }
+    .notif-list { flex: 1; overflow-y: auto; padding: 12px; }
+    .notif-item {
+      padding: 12px; border-radius: 8px; background: var(--card-bg);
+      border: 1px solid var(--border); margin-bottom: 8px; font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .notif-item .ni-title { color: var(--text); font-weight: 500; margin-bottom: 2px; }
+    .notif-item .ni-sub { color: var(--muted); }
+    .notif-item .ni-time { color: var(--accent); font-size: 0.73rem; margin-top: 4px; }
+    .notif-empty { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 0.85rem; }
+    .notif-clear { padding: 12px 20px; border-top: 1px solid var(--border); }
+    .notif-clear button {
+      width: 100%; background: none; border: 1px solid var(--border); color: var(--muted);
+      border-radius: 6px; padding: 8px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem; cursor: pointer;
+    }
+    .notif-clear button:hover { border-color: var(--red); color: var(--red); }
+
     /* ── Modal ── */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.78);
-      backdrop-filter: blur(4px);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.78); backdrop-filter: blur(4px);
       display: flex; align-items: center; justify-content: center;
-      z-index: 100; padding: 24px;
-      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+      z-index: 100; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
     }
     .modal-overlay.open { opacity: 1; pointer-events: all; }
-
     .modal {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; width: 100%; max-width: 480px; padding: 30px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      width: 100%; max-width: 480px; padding: 30px;
       transform: translateY(16px); transition: transform 0.2s; max-height: 90vh; overflow-y: auto;
     }
     .modal-overlay.open .modal { transform: translateY(0); }
-
     .modal h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 400; margin-bottom: 22px; }
 
     .field { margin-bottom: 16px; }
     .field label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 5px; letter-spacing: 0.04em; }
     .field input, .field textarea, .field select {
-      width: 100%; background: var(--bg); border: 1px solid var(--border);
-      border-radius: 6px; color: var(--text); font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem; padding: 10px 14px; outline: none; transition: border-color 0.15s;
+      width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+      color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      padding: 10px 14px; outline: none; transition: border-color 0.15s;
     }
     .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent); }
     .field textarea { resize: vertical; min-height: 76px; }
 
     .upload-zone {
-      border: 2px dashed var(--border); border-radius: 6px;
-      padding: 20px; text-align: center; cursor: pointer;
-      color: var(--muted); font-size: 0.83rem; transition: border-color 0.15s;
-      position: relative;
+      border: 2px dashed var(--border); border-radius: 6px; padding: 20px; text-align: center;
+      cursor: pointer; color: var(--muted); font-size: 0.83rem; transition: border-color 0.15s; position: relative;
     }
     .upload-zone:hover { border-color: var(--accent); }
     .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
     .upload-zone .up-icon { font-size: 1.4rem; margin-bottom: 4px; }
-
     .img-preview { margin-top: 10px; width: 100%; max-height: 160px; object-fit: cover; border-radius: 6px; display: none; }
 
     .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
     .btn-cancel {
-      background: none; border: 1px solid var(--border); color: var(--muted);
-      border-radius: 6px; padding: 9px 18px;
-      font-family: 'DM Sans', sans-serif; font-size: 0.875rem; cursor: pointer;
+      background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 6px;
+      padding: 9px 18px; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; cursor: pointer;
     }
     .btn-cancel:hover { border-color: var(--text); color: var(--text); }
     .btn-save {
-      background: var(--accent); color: #0e0e10; border: none; border-radius: 6px;
-      padding: 9px 22px; font-family: 'DM Sans', sans-serif; font-size: 0.875rem;
-      font-weight: 500; cursor: pointer; transition: opacity 0.15s;
+      background: var(--accent); color: #0e0e10; border: none; border-radius: 6px; padding: 9px 22px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: opacity 0.15s;
     }
     .btn-save:hover { opacity: 0.85; }
 
     /* ── View modal ── */
-    .view-modal .modal { max-width: 580px; padding: 0; overflow: hidden; }
+    .view-modal .modal { max-width: 600px; padding: 0; overflow: hidden; }
     .vm-img { width: 100%; max-height: 320px; object-fit: cover; }
     .vm-body { padding: 24px 28px 28px; }
     .vm-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
@@ -273,28 +326,96 @@
     .vm-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 10px; }
     .vm-desc { color: var(--muted); line-height: 1.65; font-size: 0.88rem; }
 
+    /* ── Reactions in view modal ── */
+    .vm-reactions { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 0; }
+    .vm-reaction-btn {
+      display: flex; align-items: center; gap: 5px;
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px;
+      padding: 5px 14px; font-size: 0.85rem; cursor: pointer; transition: all 0.15s; color: var(--muted);
+    }
+    .vm-reaction-btn:hover { border-color: var(--accent); }
+    .vm-reaction-btn.reacted { border-color: var(--accent); color: var(--accent); background: rgba(200,169,110,0.1); }
+
+    /* ── Comments section ── */
+    .vm-comments { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 18px; }
+    .vm-comments h4 { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+    .comment-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; max-height: 200px; overflow-y: auto; }
+    .comment-item { display: flex; gap: 8px; }
+    .comment-item .av { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #0e0e10; flex-shrink: 0; margin-top: 2px; }
+    .comment-bubble { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; flex: 1; }
+    .comment-bubble .c-author { font-size: 0.75rem; color: var(--accent); font-weight: 500; margin-bottom: 2px; }
+    .comment-bubble .c-text { font-size: 0.83rem; color: var(--text); line-height: 1.5; }
+    .comment-bubble .c-time { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
+    .comment-input-row { display: flex; gap: 8px; }
+    .comment-input-row input {
+      flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+      color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+      padding: 8px 12px; outline: none; transition: border-color 0.15s;
+    }
+    .comment-input-row input:focus { border-color: var(--accent); }
+    .btn-comment {
+      background: var(--accent); color: #0e0e10; border: none; border-radius: 6px;
+      padding: 8px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+      font-weight: 500; cursor: pointer; white-space: nowrap;
+    }
+    .btn-comment:hover { opacity: 0.85; }
+
     @media (max-width: 540px) {
       .grid { grid-template-columns: 1fr; }
       .modal { padding: 20px; }
-      .user-badge { top: 14px; right: 14px; }
+      .user-badge { top: 14px; right: 14px; font-size: 0; }
+      .user-badge span { display: none; }
+      .notif-panel { width: 100%; }
     }
   </style>
 </head>
 <body>
 
-<!-- Name gate -->
-<div id="name-gate">
+<!-- ══ Setup ══ -->
+<div id="setup-screen">
+  <div class="setup-box">
+    <h2>One-time setup 🔧</h2>
+    <p class="sub">
+      To share moments with everyone, this app stores data on
+      <strong style="color:var(--text)">JSONBin.io</strong> — a free shared database.
+      You only need to do this once.
+    </p>
+    <div class="setup-step">
+      <div class="step-label">Step 1 — Get a free API key</div>
+      <div class="hint">Go to <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> → Sign Up → API Keys → copy your <strong>Secret Key</strong>.</div>
+    </div>
+    <div class="setup-step">
+      <div class="step-label">Step 2 — Paste your Secret Key</div>
+      <input type="password" id="cfg-apikey" placeholder="$2b$10$…"/>
+      <div class="hint">Saved only in your browser's localStorage.</div>
+    </div>
+    <div class="setup-divider">— then —</div>
+    <div class="setup-step">
+      <div class="step-label">Step 3 — Bin ID <span style="color:var(--muted);font-size:0.75rem">(leave blank to create a new shared bin)</span></div>
+      <input type="text" id="cfg-binid" placeholder="Optional — paste an existing Bin ID to join a group"/>
+      <div class="hint">Share this ID with friends so you all see the same moments.</div>
+    </div>
+    <button class="btn-setup-save" onclick="saveConfig()">Save &amp; Continue →</button>
+  </div>
+</div>
+
+<!-- ══ Name gate ══ -->
+<div id="name-gate" class="hidden">
   <div class="gate-box">
     <div class="gate-icon">👋</div>
     <h2>What's your name?</h2>
-    <p>Your name will appear on every moment you share with the group.</p>
-    <input type="text" id="name-input" placeholder="e.g. Maria" maxlength="30" onkeydown="if(event.key==='Enter')enterApp()"/>
+    <p>Your name will appear on every moment you share.</p>
+    <input type="text" id="name-input" placeholder="e.g. Maria" maxlength="30"
+           onkeydown="if(event.key==='Enter')enterApp()"/>
     <button onclick="enterApp()">Enter</button>
   </div>
 </div>
 
-<!-- Header -->
+<!-- ══ Header ══ -->
 <header>
+  <button class="notif-bell" id="notif-bell" onclick="toggleNotifPanel()" style="display:none">
+    🔔 Notifications <span class="badge" id="notif-badge"></span>
+  </button>
   <div class="user-badge" id="user-badge" style="display:none">
     <div class="avatar" id="hdr-avatar"></div>
     <span id="hdr-name"></span>
@@ -317,6 +438,10 @@
     </svg>
     Add Moment
   </button>
+  <button class="btn-settings" onclick="openSetup()">⚙ Settings</button>
+  <div id="bin-id-display">
+    Bin ID: <span id="bin-id-val" onclick="copyBinId()"></span>
+  </div>
   <div class="view-toggle">
     <button class="view-btn active" id="grid-btn" onclick="setView('grid')">⊞ Grid</button>
     <button class="view-btn" id="list-btn" onclick="setView('list')">☰ List</button>
@@ -325,7 +450,21 @@
 
 <div class="grid" id="grid"></div>
 
-<!-- Add Modal -->
+<!-- ══ Notification Panel ══ -->
+<div class="notif-panel" id="notif-panel">
+  <div class="notif-header">
+    <h3>🔔 Notifications</h3>
+    <button class="notif-close" onclick="toggleNotifPanel()">✕</button>
+  </div>
+  <div class="notif-list" id="notif-list">
+    <div class="notif-empty">No notifications yet</div>
+  </div>
+  <div class="notif-clear">
+    <button onclick="clearNotifs()">Clear all</button>
+  </div>
+</div>
+
+<!-- ══ Add Modal ══ -->
 <div class="modal-overlay" id="form-modal">
   <div class="modal">
     <h2>New Moment</h2>
@@ -370,7 +509,7 @@
   </div>
 </div>
 
-<!-- View Modal -->
+<!-- ══ View Modal ══ -->
 <div class="modal-overlay view-modal" id="view-modal">
   <div class="modal">
     <img class="vm-img" id="vm-img" src="" alt="" style="display:none"/>
@@ -384,6 +523,21 @@
       </div>
       <div class="vm-title" id="vm-title"></div>
       <div class="vm-desc" id="vm-desc"></div>
+
+      <!-- Reactions -->
+      <div class="vm-reactions" id="vm-reactions"></div>
+
+      <!-- Comments -->
+      <div class="vm-comments">
+        <h4>Comments</h4>
+        <div class="comment-list" id="comment-list"></div>
+        <div class="comment-input-row">
+          <input type="text" id="comment-input" placeholder="Add a comment…" maxlength="200"
+                 onkeydown="if(event.key==='Enter')postComment()"/>
+          <button class="btn-comment" onclick="postComment()">Post</button>
+        </div>
+      </div>
+
       <div class="modal-footer" style="margin-top:18px">
         <button class="btn-cancel" onclick="closeModal('view-modal')">Close</button>
       </div>
@@ -394,216 +548,558 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── Palette for author avatars ──
-  const COLORS = ['#c8a96e','#4caf82','#6e9ec8','#c86e9a','#9ec86e','#c8936e','#6ec8c2'];
-  function strColor(str) {
-    let h = 0; for (let c of str) h = (h * 31 + c.charCodeAt(0)) & 0xffffffff;
-    return COLORS[Math.abs(h) % COLORS.length];
-  }
-  function initials(name) { return name.trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2); }
+// ═══════════════════════════════════════════
+//  CONSTANTS & STATE
+// ═══════════════════════════════════════════
+const LS_CFG   = 'beshyy_cfg';
+const LS_USER  = 'beshyy_user';
+const LS_SEEN  = 'beshyy_seen';   // ts of last seen moment
+const LS_NOTIF = 'beshyy_notifs'; // local notification log
+const JSONBIN  = 'https://api.jsonbin.io/v3';
+const EMOJI_REACTIONS = ['❤️','😂','😮','😢','🔥'];
 
-  // ── User identity ──
-  let currentUser = localStorage.getItem('moments_user') || '';
+let cfg = null;
+let currentUser = '';
+let moments = [];
+let lastHash = '';
+let pollTimer = null;
+let viewingIndex = -1; // which moment is open in view modal
 
-  function enterApp() {
-    const name = document.getElementById('name-input').value.trim();
-    if (!name) { document.getElementById('name-input').focus(); return; }
-    currentUser = name;
-    localStorage.setItem('moments_user', name);
-    document.getElementById('name-gate').classList.add('hidden');
-    showUserBadge();
-    renderGrid();
-    startPolling();
-  }
+// ═══════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════
+const COLORS = ['#c8a96e','#4caf82','#6e9ec8','#c86e9a','#9ec86e','#c8936e','#6ec8c2'];
+function strColor(s) {
+  let h = 0; for (let c of (s||'')) h = (h * 31 + c.charCodeAt(0)) & 0xffffffff;
+  return COLORS[Math.abs(h) % COLORS.length];
+}
+function initials(n) {
+  return (n||'?').trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2);
+}
+function timeAgo(ts) {
+  const d = Date.now() - ts;
+  if (d < 60000) return 'just now';
+  if (d < 3600000) return Math.floor(d/60000) + 'm ago';
+  if (d < 86400000) return Math.floor(d/3600000) + 'h ago';
+  return Math.floor(d/86400000) + 'd ago';
+}
+function fmtDate(dateStr) {
+  if (!dateStr) return '';
+  return new Date(dateStr+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+function fmtDateLong(dateStr) {
+  if (!dateStr) return '';
+  return new Date(dateStr+'T12:00:00').toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+}
 
-  function showUserBadge() {
-    const badge = document.getElementById('user-badge');
-    badge.style.display = 'flex';
-    document.getElementById('hdr-name').textContent = currentUser;
-    const av = document.getElementById('hdr-avatar');
-    av.textContent = initials(currentUser);
-    av.style.background = strColor(currentUser);
-  }
+// ═══════════════════════════════════════════
+//  JSONBIN API
+// ═══════════════════════════════════════════
+async function apiFetch(path, opts={}) {
+  const res = await fetch(JSONBIN + path, {
+    ...opts,
+    headers: { 'Content-Type':'application/json', 'X-Master-Key': cfg.apiKey, ...(opts.headers||{}) }
+  });
+  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.message||`HTTP ${res.status}`); }
+  return res.json();
+}
+async function createBin(data) {
+  const res = await apiFetch('/b', {
+    method:'POST',
+    headers:{'X-Bin-Name':'beshyy-moments'},
+    body: JSON.stringify(data)
+  });
+  return res.metadata.id;
+}
+async function readBin() {
+  const res = await apiFetch(`/b/${cfg.binId}/latest`);
+  return res.record;
+}
+async function writeBin(data) {
+  await apiFetch(`/b/${cfg.binId}`, { method:'PUT', body: JSON.stringify(data) });
+}
 
-  function changeName() {
-    currentUser = '';
-    localStorage.removeItem('moments_user');
-    document.getElementById('user-badge').style.display = 'none';
-    document.getElementById('name-input').value = '';
-    document.getElementById('name-gate').classList.remove('hidden');
-  }
+// ═══════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════
+function loadCfg() {
+  try { cfg = JSON.parse(localStorage.getItem(LS_CFG)); } catch(e) { cfg = null; }
+  return cfg && cfg.apiKey;
+}
+function saveCfgToLS(apiKey, binId) {
+  cfg = { apiKey, binId };
+  localStorage.setItem(LS_CFG, JSON.stringify(cfg));
+}
 
-  // ── Storage (shared via window.storage) ──
-  const STORE_KEY = 'shared-moments-v1';
-  let moments = [];
-  let lastCount = -1;
-
-  async function loadMoments() {
-    try {
-      const res = await window.storage.get(STORE_KEY, true);
-      moments = res ? JSON.parse(res.value) : [];
-    } catch(e) { moments = []; }
-  }
-
-  async function saveMoments() {
-    try {
-      await window.storage.set(STORE_KEY, JSON.stringify(moments), true);
-    } catch(e) { showToast('Could not save — storage error'); }
-  }
-
-  // ── Polling for live updates ──
-  let pollTimer;
-  async function poll() {
-    await loadMoments();
-    if (moments.length !== lastCount) {
-      lastCount = moments.length;
-      renderGrid();
+async function saveConfig() {
+  const apiKey = document.getElementById('cfg-apikey').value.trim();
+  const binIdInput = document.getElementById('cfg-binid').value.trim();
+  if (!apiKey) { alert('Please paste your JSONBin Secret Key.'); return; }
+  showToast('Connecting…');
+  try {
+    let binId = binIdInput;
+    if (!binId) {
+      saveCfgToLS(apiKey, '__temp__');
+      binId = await createBin({ moments: [] });
+      showToast('✅ New shared bin created!');
+    } else {
+      saveCfgToLS(apiKey, binId);
+      await readBin();
+      showToast('✅ Connected to shared bin!');
     }
-    updateLiveCount();
+    saveCfgToLS(apiKey, binId);
+    document.getElementById('setup-screen').classList.add('hidden');
+    showBinId();
+    bootApp();
+  } catch(e) { showToast('❌ Error: ' + e.message); }
+}
+
+function openSetup() {
+  document.getElementById('setup-screen').classList.remove('hidden');
+  if (cfg) {
+    document.getElementById('cfg-apikey').value = cfg.apiKey||'';
+    document.getElementById('cfg-binid').value  = cfg.binId||'';
   }
-  function startPolling() { poll(); pollTimer = setInterval(poll, 5000); }
+}
+function showBinId() {
+  if (!cfg||!cfg.binId) return;
+  const el = document.getElementById('bin-id-display');
+  el.style.display = 'block';
+  document.getElementById('bin-id-val').textContent = cfg.binId;
+}
+function copyBinId() {
+  navigator.clipboard.writeText(cfg.binId).then(()=>showToast('Bin ID copied!'));
+}
 
-  function updateLiveCount() {
-    const el = document.getElementById('live-count');
-    el.textContent = moments.length === 0
-      ? 'No moments yet — be the first!'
-      : `${moments.length} moment${moments.length===1?'':'s'} shared`;
-  }
-
-  // ── Render ──
-  function renderGrid() {
-    const grid = document.getElementById('grid');
-    updateLiveCount();
-    if (moments.length === 0) {
-      grid.innerHTML = `<div class="empty"><div class="icon">🌿</div><h2>No moments yet</h2><p>Add the first one for everyone to see.</p></div>`;
-      return;
-    }
-    grid.innerHTML = '';
-    [...moments].reverse().forEach((m, ri) => {
-      const i = moments.length - 1 - ri;
-      const card = document.createElement('div');
-      card.className = 'card';
-      const col = strColor(m.author || '?');
-      const imgHtml = m.img
-        ? `<img class="card-img" src="${m.img}" alt="${m.title}" onclick="viewCard(${i})"/>`
-        : `<div class="card-img-placeholder" onclick="viewCard(${i})">🖼️</div>`;
-      const tagHtml = m.tag ? `<div class="card-tag">${m.tag}</div>` : '';
-      const dateStr = m.date ? new Date(m.date+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
-      const isOwn = m.author === currentUser;
-      card.innerHTML = `
-        ${imgHtml}${tagHtml}
-        <div class="card-body">
-          <div class="card-meta">
-            ${dateStr ? `<div class="card-date">${dateStr}</div>` : '<div></div>'}
-            <div class="card-author">
-              <div class="av" style="background:${col}">${initials(m.author||'?')}</div>
-              ${m.author||'Unknown'}
-            </div>
-          </div>
-          <div class="card-title">${m.title||'Untitled'}</div>
-          ${m.desc?`<div class="card-desc">${m.desc.slice(0,100)}${m.desc.length>100?'…':''}</div>`:''}
-          <div class="card-actions">
-            <button class="btn-sm" onclick="viewCard(${i})">View</button>
-            ${isOwn?`<button class="btn-sm danger" onclick="deleteCard(${i})">Delete</button>`:''}
-          </div>
-        </div>`;
-      grid.appendChild(card);
-    });
-  }
-
-  // ── Add ──
-  function openAddModal() {
-    if (!currentUser) return;
-    document.getElementById('f-title').value = '';
-    document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
-    document.getElementById('f-desc').value = '';
-    document.getElementById('f-tag').value = '';
-    document.getElementById('img-preview').style.display = 'none';
-    document.getElementById('img-preview').src = '';
-    document.getElementById('f-file').value = '';
-    window._pendingImg = null;
-    openModal('form-modal');
-  }
-
-  async function saveCard() {
-    const title = document.getElementById('f-title').value.trim();
-    if (!title) { alert('Please add a title.'); return; }
-    const m = {
-      title, author: currentUser,
-      date: document.getElementById('f-date').value,
-      desc: document.getElementById('f-desc').value.trim(),
-      tag: document.getElementById('f-tag').value,
-      img: window._pendingImg || null,
-      ts: Date.now()
-    };
-    await loadMoments();
-    moments.push(m);
-    await saveMoments();
-    lastCount = moments.length;
-    renderGrid();
-    closeModal('form-modal');
-    showToast('✨ Moment shared!');
-  }
-
-  async function deleteCard(i) {
-    if (!confirm('Remove your moment?')) return;
-    await loadMoments();
-    moments.splice(i, 1);
-    await saveMoments();
-    lastCount = moments.length;
-    renderGrid();
-    showToast('Moment removed.');
-  }
-
-  function viewCard(i) {
-    const m = moments[i];
-    const vmImg = document.getElementById('vm-img');
-    if (m.img) { vmImg.src = m.img; vmImg.style.display = 'block'; }
-    else { vmImg.style.display = 'none'; }
-    const col = strColor(m.author||'?');
-    const dateStr = m.date ? new Date(m.date+'T12:00:00').toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) : '';
-    document.getElementById('vm-date').textContent = dateStr + (m.tag?(dateStr?' · ':'')+m.tag:'');
-    document.getElementById('vm-av').textContent = initials(m.author||'?');
-    document.getElementById('vm-av').style.background = col;
-    document.getElementById('vm-author').textContent = m.author||'Unknown';
-    document.getElementById('vm-title').textContent = m.title||'Untitled';
-    document.getElementById('vm-desc').textContent = m.desc||'';
-    openModal('view-modal');
-  }
-
-  function handleFile(input) {
-    const file = input.files[0]; if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      window._pendingImg = e.target.result;
-      const prev = document.getElementById('img-preview');
-      prev.src = e.target.result; prev.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function setView(v) {
-    document.getElementById('grid').classList.toggle('list-view', v==='list');
-    document.getElementById('grid-btn').classList.toggle('active', v==='grid');
-    document.getElementById('list-btn').classList.toggle('active', v==='list');
-  }
-
-  function openModal(id) { document.getElementById(id).classList.add('open'); }
-  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-  document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); }));
-
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2800);
-  }
-
-  // ── Boot ──
+// ═══════════════════════════════════════════
+//  BOOT / USER
+// ═══════════════════════════════════════════
+function bootApp() {
+  currentUser = localStorage.getItem(LS_USER) || '';
   if (currentUser) {
     document.getElementById('name-gate').classList.add('hidden');
     showUserBadge();
+    document.getElementById('notif-bell').style.display = 'flex';
     startPolling();
+  } else {
+    document.getElementById('name-gate').classList.remove('hidden');
   }
+}
+
+function enterApp() {
+  const name = document.getElementById('name-input').value.trim();
+  if (!name) { document.getElementById('name-input').focus(); return; }
+  currentUser = name;
+  localStorage.setItem(LS_USER, name);
+  document.getElementById('name-gate').classList.add('hidden');
+  showUserBadge();
+  document.getElementById('notif-bell').style.display = 'flex';
+  startPolling();
+}
+
+function changeName() {
+  currentUser = '';
+  localStorage.removeItem(LS_USER);
+  document.getElementById('user-badge').style.display = 'none';
+  document.getElementById('name-gate').classList.remove('hidden');
+  document.getElementById('notif-bell').style.display = 'none';
+}
+
+function showUserBadge() {
+  const badge = document.getElementById('user-badge');
+  badge.style.display = 'flex';
+  document.getElementById('hdr-name').textContent = currentUser;
+  const av = document.getElementById('hdr-avatar');
+  av.textContent = initials(currentUser);
+  av.style.background = strColor(currentUser);
+}
+
+// ═══════════════════════════════════════════
+//  STORAGE
+// ═══════════════════════════════════════════
+async function loadMoments() {
+  if (!cfg||!cfg.binId) { moments=[]; return; }
+  try {
+    const data = await readBin();
+    moments = data.moments || [];
+  } catch(e) { moments=[]; }
+}
+
+async function saveMoments() {
+  if (!cfg||!cfg.binId) { showToast('⚠ Not connected.'); return; }
+  try { await writeBin({ moments }); }
+  catch(e) { showToast('❌ Save failed: '+e.message); }
+}
+
+// ═══════════════════════════════════════════
+//  POLLING + NOTIFICATIONS
+// ═══════════════════════════════════════════
+async function poll() {
+  await loadMoments();
+  const h = JSON.stringify(moments);
+  if (h !== lastHash) {
+    if (lastHash !== '') checkForNewActivity(moments);
+    lastHash = h;
+    renderGrid();
+    // Refresh view modal if open
+    if (viewingIndex >= 0 && viewingIndex < moments.length) {
+      renderViewModal(viewingIndex);
+    }
+  }
+  updateLiveCount();
+}
+
+function startPolling() {
+  poll();
+  if (pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(poll, 6000);
+}
+
+function updateLiveCount() {
+  const el = document.getElementById('live-count');
+  if (!cfg||!cfg.binId) { el.textContent='Not connected to shared storage'; return; }
+  el.textContent = moments.length===0
+    ? 'No moments yet — be the first!'
+    : `${moments.length} moment${moments.length===1?'':'s'} shared`;
+}
+
+// ─── Notification helpers ───
+function getNotifs() {
+  try { return JSON.parse(localStorage.getItem(LS_NOTIF)||'[]'); } catch(e) { return []; }
+}
+function saveNotifs(arr) { localStorage.setItem(LS_NOTIF, JSON.stringify(arr.slice(0,50))); }
+
+function addNotif(item) {
+  const arr = getNotifs();
+  arr.unshift({ ...item, id: Date.now() + Math.random() });
+  saveNotifs(arr);
+  renderNotifPanel();
+  updateNotifBadge();
+}
+
+function checkForNewActivity(newMoments) {
+  const lastSeen = parseInt(localStorage.getItem(LS_SEEN)||'0');
+
+  newMoments.forEach(m => {
+    // New moment posted by someone else
+    if (m.ts > lastSeen && m.author !== currentUser) {
+      addNotif({ type:'moment', text:`${m.author} shared "${m.title}"`, ts: Date.now() });
+    }
+    // New comment on any moment
+    (m.comments||[]).forEach(c => {
+      if (c.ts > lastSeen && c.author !== currentUser) {
+        addNotif({ type:'comment', text:`${c.author} commented on "${m.title}": "${c.text.slice(0,40)}${c.text.length>40?'…':''}"`, ts: Date.now() });
+      }
+    });
+    // New reaction on your moment
+    if (m.author === currentUser) {
+      Object.entries(m.reactions||{}).forEach(([emoji, users]) => {
+        users.forEach(u => {
+          const key = `react_${m.ts}_${emoji}_${u}`;
+          const seen = localStorage.getItem(key);
+          if (!seen && u !== currentUser) {
+            localStorage.setItem(key, '1');
+            addNotif({ type:'reaction', text:`${u} reacted ${emoji} to "${m.title}"`, ts: Date.now() });
+          }
+        });
+      });
+    }
+  });
+
+  localStorage.setItem(LS_SEEN, Date.now());
+}
+
+function renderNotifPanel() {
+  const list = document.getElementById('notif-list');
+  const notifs = getNotifs();
+  if (notifs.length===0) {
+    list.innerHTML = '<div class="notif-empty">No notifications yet</div>';
+    return;
+  }
+  list.innerHTML = notifs.map(n=>`
+    <div class="notif-item">
+      <div class="ni-title">${n.type==='moment'?'📸':n.type==='comment'?'💬':'❤️'} ${n.type==='moment'?'New moment':n.type==='comment'?'New comment':'New reaction'}</div>
+      <div class="ni-sub">${n.text}</div>
+      <div class="ni-time">${timeAgo(n.ts)}</div>
+    </div>`).join('');
+}
+
+function updateNotifBadge() {
+  const count = getNotifs().length;
+  const badge = document.getElementById('notif-badge');
+  badge.textContent = count > 9 ? '9+' : count;
+  badge.classList.toggle('show', count > 0);
+}
+
+function toggleNotifPanel() {
+  const p = document.getElementById('notif-panel');
+  p.classList.toggle('open');
+  if (p.classList.contains('open')) {
+    renderNotifPanel();
+    // clear badge when opened
+    const badge = document.getElementById('notif-badge');
+    badge.classList.remove('show');
+  }
+}
+
+function clearNotifs() {
+  saveNotifs([]);
+  renderNotifPanel();
+  updateNotifBadge();
+}
+
+// ═══════════════════════════════════════════
+//  RENDER GRID
+// ═══════════════════════════════════════════
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  updateLiveCount();
+  if (moments.length===0) {
+    grid.innerHTML=`<div class="empty"><div class="icon">🌿</div><h2>No moments yet</h2><p>Add the first one for everyone to see.</p></div>`;
+    return;
+  }
+  grid.innerHTML='';
+  [...moments].reverse().forEach((m, ri) => {
+    const i = moments.length - 1 - ri;
+    const card = document.createElement('div');
+    card.className = 'card';
+    const col = strColor(m.author||'?');
+    const imgHtml = m.img
+      ? `<img class="card-img" src="${m.img}" alt="${m.title}" onclick="openViewModal(${i})"/>`
+      : `<div class="card-img-placeholder" onclick="openViewModal(${i})">🖼️</div>`;
+    const tagHtml = m.tag ? `<div class="card-tag">${m.tag}</div>` : '';
+    const dateStr = fmtDate(m.date);
+    const isOwn = m.author === currentUser;
+
+    // Reaction summary for card
+    const reactions = m.reactions || {};
+    const reactionHtml = EMOJI_REACTIONS.map(e => {
+      const users = reactions[e] || [];
+      const count = users.length;
+      const reacted = users.includes(currentUser);
+      if (count === 0) return '';
+      return `<span class="reaction-btn ${reacted?'reacted':''}" onclick="event.stopPropagation();toggleReaction(${i},'${e}')">
+        ${e} <span class="reaction-count">${count}</span>
+      </span>`;
+    }).join('');
+
+    const commentCount = (m.comments||[]).length;
+
+    card.innerHTML = `
+      ${imgHtml}${tagHtml}
+      <div class="card-body">
+        <div class="card-meta">
+          ${dateStr?`<div class="card-date">${dateStr}</div>`:'<div></div>'}
+          <div class="card-author">
+            <div class="av" style="background:${col}">${initials(m.author||'?')}</div>
+            ${m.author||'Unknown'}
+          </div>
+        </div>
+        <div class="card-title">${m.title||'Untitled'}</div>
+        ${m.desc?`<div class="card-desc">${m.desc.slice(0,100)}${m.desc.length>100?'…':''}</div>`:''}
+        ${reactionHtml ? `<div class="card-reactions">${reactionHtml}</div>` : ''}
+        <div class="card-actions">
+          <button class="btn-sm" onclick="openViewModal(${i})">
+            View${commentCount>0?` · 💬 ${commentCount}`:''}
+          </button>
+          ${isOwn?`<button class="btn-sm danger" onclick="deleteCard(${i})">Delete</button>`:''}
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════
+//  VIEW MODAL
+// ═══════════════════════════════════════════
+function openViewModal(i) {
+  viewingIndex = i;
+  renderViewModal(i);
+  openModal('view-modal');
+}
+
+function renderViewModal(i) {
+  const m = moments[i];
+  if (!m) return;
+
+  const vmImg = document.getElementById('vm-img');
+  if (m.img) { vmImg.src=m.img; vmImg.style.display='block'; }
+  else { vmImg.style.display='none'; }
+
+  const col = strColor(m.author||'?');
+  const dateStr = fmtDateLong(m.date);
+  document.getElementById('vm-date').textContent = dateStr + (m.tag?(dateStr?' · ':'')+m.tag:'');
+  document.getElementById('vm-av').textContent = initials(m.author||'?');
+  document.getElementById('vm-av').style.background = col;
+  document.getElementById('vm-author').textContent = m.author||'Unknown';
+  document.getElementById('vm-title').textContent = m.title||'Untitled';
+  document.getElementById('vm-desc').textContent = m.desc||'';
+
+  // Reactions
+  const reactions = m.reactions || {};
+  document.getElementById('vm-reactions').innerHTML = EMOJI_REACTIONS.map(e => {
+    const users = reactions[e]||[];
+    const reacted = users.includes(currentUser);
+    return `<button class="vm-reaction-btn ${reacted?'reacted':''}" onclick="toggleReaction(${i},'${e}')">
+      ${e} <span>${users.length||''}</span>
+    </button>`;
+  }).join('');
+
+  // Comments
+  const comments = m.comments || [];
+  const cl = document.getElementById('comment-list');
+  if (comments.length===0) {
+    cl.innerHTML='<div style="color:var(--muted);font-size:0.82rem;padding:4px 0">No comments yet — say something!</div>';
+  } else {
+    cl.innerHTML = comments.map(c=>{
+      const cc = strColor(c.author||'?');
+      return `<div class="comment-item">
+        <div class="av" style="background:${cc};width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#0e0e10;flex-shrink:0;margin-top:2px">${initials(c.author||'?')}</div>
+        <div class="comment-bubble">
+          <div class="c-author">${c.author||'Unknown'}</div>
+          <div class="c-text">${c.text}</div>
+          <div class="c-time">${timeAgo(c.ts)}</div>
+        </div>
+      </div>`;
+    }).join('');
+    // scroll to bottom
+    cl.scrollTop = cl.scrollHeight;
+  }
+
+  document.getElementById('comment-input').value='';
+}
+
+// ═══════════════════════════════════════════
+//  REACTIONS
+// ═══════════════════════════════════════════
+async function toggleReaction(i, emoji) {
+  if (!currentUser) return;
+  await loadMoments();
+  const m = moments[i];
+  if (!m) return;
+  if (!m.reactions) m.reactions = {};
+  if (!m.reactions[emoji]) m.reactions[emoji] = [];
+  const users = m.reactions[emoji];
+  const idx = users.indexOf(currentUser);
+  if (idx === -1) { users.push(currentUser); }
+  else { users.splice(idx, 1); }
+  await saveMoments();
+  lastHash = JSON.stringify(moments);
+  renderGrid();
+  if (viewingIndex === i) renderViewModal(i);
+}
+
+// ═══════════════════════════════════════════
+//  COMMENTS
+// ═══════════════════════════════════════════
+async function postComment() {
+  const input = document.getElementById('comment-input');
+  const text = input.value.trim();
+  if (!text || !currentUser) return;
+  await loadMoments();
+  const m = moments[viewingIndex];
+  if (!m) return;
+  if (!m.comments) m.comments = [];
+  m.comments.push({ author: currentUser, text, ts: Date.now() });
+  await saveMoments();
+  lastHash = JSON.stringify(moments);
+  input.value = '';
+  renderGrid();
+  renderViewModal(viewingIndex);
+  showToast('💬 Comment posted!');
+}
+
+// ═══════════════════════════════════════════
+//  ADD / DELETE
+// ═══════════════════════════════════════════
+function openAddModal() {
+  if (!currentUser) return;
+  document.getElementById('f-title').value='';
+  document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('f-desc').value='';
+  document.getElementById('f-tag').value='';
+  document.getElementById('img-preview').style.display='none';
+  document.getElementById('img-preview').src='';
+  document.getElementById('f-file').value='';
+  window._pendingImg=null;
+  openModal('form-modal');
+}
+
+async function saveCard() {
+  const title = document.getElementById('f-title').value.trim();
+  if (!title) { alert('Please add a title.'); return; }
+  const m = {
+    title, author: currentUser,
+    date: document.getElementById('f-date').value,
+    desc: document.getElementById('f-desc').value.trim(),
+    tag: document.getElementById('f-tag').value,
+    img: window._pendingImg||null,
+    reactions: {}, comments: [],
+    ts: Date.now()
+  };
+  await loadMoments();
+  moments.push(m);
+  await saveMoments();
+  lastHash = JSON.stringify(moments);
+  renderGrid();
+  closeModal('form-modal');
+  showToast('✨ Moment shared!');
+}
+
+async function deleteCard(i) {
+  if (!confirm('Remove your moment?')) return;
+  await loadMoments();
+  moments.splice(i,1);
+  await saveMoments();
+  lastHash=JSON.stringify(moments);
+  renderGrid();
+  showToast('Moment removed.');
+}
+
+function handleFile(input) {
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    window._pendingImg=e.target.result;
+    const prev=document.getElementById('img-preview');
+    prev.src=e.target.result; prev.style.display='block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ═══════════════════════════════════════════
+//  UI UTILS
+// ═══════════════════════════════════════════
+function setView(v) {
+  document.getElementById('grid').classList.toggle('list-view',v==='list');
+  document.getElementById('grid-btn').classList.toggle('active',v==='grid');
+  document.getElementById('list-btn').classList.toggle('active',v==='list');
+}
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  if (id==='view-modal') viewingIndex=-1;
+}
+document.querySelectorAll('.modal-overlay').forEach(o=>
+  o.addEventListener('click',e=>{ if(e.target===o){ o.classList.remove('open'); if(o.id==='view-modal') viewingIndex=-1; } })
+);
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+(function init() {
+  updateNotifBadge();
+  if (loadCfg()) {
+    document.getElementById('setup-screen').classList.add('hidden');
+    showBinId();
+    bootApp();
+  }
+})();
 </script>
 </body>
 </html>
